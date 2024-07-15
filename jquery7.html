@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>jQuery and jQueryUI Implementation</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        .custom-class {
+            font-weight: bold;
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>jQuery and jQueryUI Implementation</h2>
+
+    <p id="initialText">Initial text for DOM manipulation.</p>
+
+    <button id="animateButton">Animate Element</button>
+    <button id="ajaxButton">Fetch Data via AJAX</button>
+
+    <div id="ajaxResponse">
+    </div>
+
+    <div id="animatedElement" style="width: 100px; height: 100px; background-color: #f0f0f0; margin-top: 20px;">
+    </div>
+
+    <h3>Accordion Section</h3>
+    <div id="accordion">
+        <h4>Section 1</h4>
+        <div>
+            <p>Content for Section 1.</p>
+        </div>
+        <h4>Section 2</h4>
+        <div>
+            <p>Content for Section 2.</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        $('#initialText').text('Updated text using jQuery.');
+        $('#animateButton').click(function() {
+            $('#animatedElement').animate({
+                width: '200px',
+                height: '200px',
+                opacity: 0.5
+            }, 1000);
+        });
+
+        $('#ajaxButton').click(function() {
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/posts/1',
+                method: 'GET',
+                success: function(data) {
+                    $('#ajaxResponse').html('<h3>AJAX Response</h3><p>Title: ' + data.title + '</p><p>Body: ' + data.body + '</p>');
+                },
+                error: function() {
+                    $('#ajaxResponse').html('<p>Error fetching data.</p>');
+                }
+            });
+        });
+
+        $('#initialText').addClass('custom-class', 1000, 'easeInOutCirc');
+
+        $('#accordion').accordion({
+            collapsible: true,
+            active: false
+        });
+    });
+</script>
+
+</body>
+</html>

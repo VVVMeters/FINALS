@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery and Meetup Scheduler</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .thumbnail {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        #largeImage {
+            display: none;
+            width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Image Gallery</h2>
+    <div id="gallery">
+    </div>
+    <img id="largeImage" src="" alt="Large view">
+
+    <h2>Meetup Scheduler</h2>
+    <form id="meetupForm">
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required>
+        </div>
+        <div class="form-group">
+            <label for="details">Details:</label>
+            <textarea id="details" name="details" required></textarea>
+        </div>
+        <button type="submit">Schedule Meetup</button>
+    </form>
+</div>
+
+<script>
+    $(document).ready(function() {
+        function fetchImages() {
+            $.ajax({
+                url: 'https://jsonplaceholder.typicode.com/photos?_limit=10',
+                method: 'GET',
+                success: function(data) {
+                    $('#gallery').empty();
+                    data.forEach(function(image) {
+                        const imgElement = $('<img>').attr('src', image.thumbnailUrl).attr('alt', image.title).addClass('thumbnail');
+                        imgElement.click(function() {
+                            $('#largeImage').attr('src', image.url).show();
+                        });
+                        $('#gallery').append(imgElement);
+                    });
+                },
+                error: function() {
+                    alert('Failed to fetch images');
+                }
+            });
+        }
+
+        fetchImages();
+
+        $('#meetupForm').submit(function(event) {
+            event.preventDefault();
+            const formData = $(this).serialize();
+            console.log('Meetup scheduled with data:', formData);
+            alert('Meetup scheduled successfully!');
+            $(this).trigger('reset');
+        });
+    });
+</script>
+
+</body>
+</html>
